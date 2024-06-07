@@ -1,0 +1,39 @@
+import cv2
+import os
+from PIL import Image
+os.chdir('C:\\Users\\IMRAN\\Documents\\open cv\\anything')
+path='C:\\Users\\IMRAN\\Documents\\open cv\\anything'
+mean_width=0
+mean_height=0
+number=len(os.listdir('.'))
+print(number)
+for i in os.listdir('.'):
+    img=Image.open(os.path.join(path,i))
+    width,height=img.size
+    mean_width+=width
+    mean_height+=height
+mean_width=mean_width//7
+mean_height=mean_height//7
+print(mean_width,mean_height)
+for i in os.listdir('.'):
+    if i.endswith('jpg')or i.endswith('jpeg')or i.endswith('.png'):
+        img=Image.open(os.path.join(path,i))
+        width,height=img.size
+        resizedimage=img.resize((mean_width,mean_height))
+        resizedimage.save(i,'JPEG',quality=95)
+        print(img.filename.split('\\')[-1],'is resized')
+def videogenerator():
+ videoname='Video.avi'
+ os.chdir('C:\\Users\\IMRAN\\Documents\\open cv\\anything')
+ imglist=[]
+ for i in os.listdir('.'):
+    if i.endswith('jpg')or i.endswith('jpeg')or i.endswith('.png'):
+     imglist.append(i)
+ frame=cv2.imread(os.path.join('.',imglist[0]))
+ height,width,layers=frame.shape
+ video=cv2.VideoWriter(videoname,0,1,(width,height))
+ for i in imglist:
+    video.write(cv2.imread(os.path.join('.',i)))
+ cv2.destroyAllWindows()
+ video.release()
+videogenerator()
