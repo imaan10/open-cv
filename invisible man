@@ -1,0 +1,25 @@
+import cv2
+import numpy as np
+video=cv2.VideoCapture('video.mp4')
+count=0
+for i in range(60):
+    value,background=video.read()
+    if value==False:
+        continue
+while video.isOpened():
+    value,foreground=video.read()
+    if not value:
+        break
+    count+=1
+    imghsv=cv2.cvtColor(foreground,cv2.COLOR_BGR2HSV)
+    lr1=np.array([0,40,40])
+    ur1=np.array([0,255,255])
+    mask1=cv2.inRange(imghsv,lr1,ur1)
+    lr2=np.array([120,40,40])
+    ur2=np.array([180,255,255])
+    mask2=cv2.inRange(imghsv,lr2,ur2)
+    finalmask=mask1+mask2
+    cv2.imshow('mask',finalmask)
+    k=cv2.waitKey(10)
+    if k==27:
+        break
